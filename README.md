@@ -13,9 +13,17 @@ Inner-city retail struggles with dead hours and unpredictable weather. Tradition
 
 **For DSV-Gruppe & Payone**, this transforms the wallet from a passive payment tool into an **active demand-generation engine**, driving footfall to local merchants while deeply respecting user privacy.
 
-## 🏗️ Architecture & How It Works
+## 🏗️ Architecture & Tech Stack
 
-This MVP consists of a lightweight **Node.js/Express Backend** and a clean **React/Vite Frontend** (combining both Consumer and Merchant views for easy demoing).
+This MVP is purposefully built to be lightweight, deterministic, and highly stable for demonstrations without relying on paid external APIs or complex build tools.
+
+### Tech Stack
+- **Backend**: Node.js + Express
+- **Frontend**: React + Vite
+- **Styling**: Plain CSS (No Tailwind or PostCSS dependencies)
+- **Data**: JSON configuration files (No external database required)
+- **Security**: JWT (JSON Web Tokens) for simulated secure redemption flow
+- **AI/Logic**: Parameterized, offline deterministic generation engine (Zero API cost, zero latency)
 
 ### 1. Context Sensing Layer (On-Device / Offline Simulation)
 Aggregates real-time signals without tracking user identity or relying on external paid APIs:
