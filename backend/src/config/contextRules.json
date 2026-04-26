@@ -1,0 +1,100 @@
+{
+  "compositeStates": {
+    "cold_quiet_lunch": {
+      "label": "Cold & Quiet Lunchtime",
+      "weather": ["cold", "freezing", "cool"],
+      "timePeriod": ["lunch"],
+      "demand": ["quiet"],
+      "priority": 10,
+      "preferredArchetypes": ["weather_comfort", "off_peak_boost", "lunch_special"]
+    },
+    "cold_morning": {
+      "label": "Cold Morning",
+      "weather": ["cold", "freezing"],
+      "timePeriod": ["morning", "early_morning"],
+      "demand": ["quiet", "normal"],
+      "priority": 9,
+      "preferredArchetypes": ["weather_comfort"]
+    },
+    "rainy_afternoon": {
+      "label": "Rainy Afternoon",
+      "weather": ["rainy"],
+      "timePeriod": ["afternoon"],
+      "demand": ["quiet", "normal"],
+      "priority": 9,
+      "preferredArchetypes": ["weather_comfort", "off_peak_boost"]
+    },
+    "rainy_lunch": {
+      "label": "Rainy Lunchtime",
+      "weather": ["rainy"],
+      "timePeriod": ["lunch"],
+      "demand": ["quiet", "normal"],
+      "priority": 10,
+      "preferredArchetypes": ["weather_comfort", "lunch_special"]
+    },
+    "hot_lunch": {
+      "label": "Hot Lunchtime",
+      "weather": ["hot", "warm"],
+      "timePeriod": ["lunch"],
+      "demand": ["quiet", "normal"],
+      "priority": 8,
+      "preferredArchetypes": ["weather_comfort", "lunch_special"]
+    },
+    "quiet_evening": {
+      "label": "Quiet Evening",
+      "weather": ["cold", "cool", "mild", "warm", "rainy"],
+      "timePeriod": ["evening"],
+      "demand": ["quiet"],
+      "priority": 8,
+      "preferredArchetypes": ["evening_social", "off_peak_boost"]
+    },
+    "quiet_afternoon": {
+      "label": "Quiet Afternoon",
+      "weather": ["cold", "cool", "mild", "warm", "rainy"],
+      "timePeriod": ["afternoon"],
+      "demand": ["quiet"],
+      "priority": 7,
+      "preferredArchetypes": ["off_peak_boost", "flash_urgency"]
+    },
+    "mild_lunch": {
+      "label": "Pleasant Lunchtime",
+      "weather": ["mild", "cool"],
+      "timePeriod": ["lunch"],
+      "demand": ["normal", "quiet"],
+      "priority": 7,
+      "preferredArchetypes": ["lunch_special", "discovery"]
+    },
+    "morning_discovery": {
+      "label": "Morning Exploration",
+      "weather": ["mild", "cool", "warm"],
+      "timePeriod": ["morning"],
+      "demand": ["quiet", "normal"],
+      "priority": 6,
+      "preferredArchetypes": ["discovery", "weather_comfort"]
+    }
+  },
+  "eventCalendar": {
+    "recurring": [
+      { "dayOfWeek": 0, "timePeriod": "morning", "type": "farmers_market", "label": "Farmers Market nearby", "pressure": "high" },
+      { "dayOfWeek": 6, "timePeriod": "morning", "type": "weekend_brunch", "label": "Weekend brunch rush", "pressure": "high" },
+      { "dayOfWeek": 5, "timePeriod": "evening", "label": "Friday evening social", "type": "friday_social", "pressure": "high" },
+      { "dayOfWeek": 6, "timePeriod": "evening", "label": "Saturday night out", "type": "saturday_social", "pressure": "high" }
+    ]
+  },
+  "timeLabels": {
+    "early_morning": "Early morning",
+    "morning": "Morning",
+    "lunch": "Lunchtime",
+    "afternoon": "Afternoon",
+    "evening": "Evening",
+    "night": "Late night"
+  },
+  "timeEmojis": {
+    "early_morning": "🌅",
+    "morning": "☕",
+    "lunch": "🕐",
+    "afternoon": "🌤️",
+    "evening": "🌆",
+    "night": "🌙"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "city-wallet",
+  "version": "1.0.0",
+  "description": "Generative City Wallet — HackNation 2026 (DSV-Gruppe × MIT Clubs)",
+  "scripts": {
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "start": "cd backend && npm start",
+    "dev": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm run dev"
+  },
+  "keywords": ["city-wallet", "hackathon", "dsv", "payone"],
+  "license": "MIT"
+}

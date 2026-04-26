@@ -1,0 +1,50 @@
+{
+  "berlin": {
+    "id": "berlin",
+    "name": "Berlin",
+    "country": "DE",
+    "lat": 52.52,
+    "lon": 13.405,
+    "timezone": "Europe/Berlin",
+    "densityMultiplier": 1.0,
+    "venueTypes": ["cafe", "restaurant", "bakery", "bar", "food_market"],
+    "zones": ["city-center", "mitte", "prenzlauer-berg", "kreuzberg", "friedrichshain"],
+    "weatherProfile": [2, 3, 7, 12, 17, 20, 22, 22, 18, 13, 7, 3]
+  },
+  "munich": {
+    "id": "munich",
+    "name": "Munich",
+    "country": "DE",
+    "lat": 48.137,
+    "lon": 11.576,
+    "timezone": "Europe/Berlin",
+    "densityMultiplier": 1.1,
+    "venueTypes": ["cafe", "biergarten", "restaurant", "bakery", "deli"],
+    "zones": ["city-center", "marienplatz", "schwabing", "maxvorstadt"],
+    "weatherProfile": [0, 2, 6, 11, 16, 19, 21, 21, 17, 12, 5, 1]
+  },
+  "hamburg": {
+    "id": "hamburg",
+    "name": "Hamburg",
+    "country": "DE",
+    "lat": 53.551,
+    "lon": 9.993,
+    "timezone": "Europe/Berlin",
+    "densityMultiplier": 0.9,
+    "venueTypes": ["cafe", "fish_market", "restaurant", "bar", "bakery"],
+    "zones": ["city-center", "hafencity", "altona", "eimsbüttel"],
+    "weatherProfile": [3, 3, 6, 9, 14, 17, 19, 19, 16, 12, 7, 4]
+  },
+  "frankfurt": {
+    "id": "frankfurt",
+    "name": "Frankfurt",
+    "country": "DE",
+    "lat": 50.110,
+    "lon": 8.682,
+    "timezone": "Europe/Berlin",
+    "densityMultiplier": 1.05,
+    "venueTypes": ["cafe", "restaurant", "deli", "bar", "food_hall"],
+    "zones": ["city-center", "sachsenhausen", "bornheim", "nordend"],
+    "weatherProfile": [3, 4, 8, 13, 18, 21, 23, 23, 19, 13, 7, 3]
+  }
+}

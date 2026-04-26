@@ -1,0 +1,103 @@
+{
+  "merchants": [
+    {
+      "id": "cafe_mitte_001",
+      "name": "Café Mitte",
+      "category": "cafe",
+      "city": "all",
+      "zone": "city-center",
+      "address": "Unter den Linden 42, Berlin Mitte",
+      "logo": "☕",
+      "goals": ["fill_quiet_hours", "increase_lunch_traffic", "attract_new_customers"],
+      "constraints": {
+        "maxDiscountPercent": 20,
+        "minDiscountPercent": 8,
+        "activeHoursStart": "00:00",
+        "activeHoursEnd": "23:59",
+        "offerCooldownMinutes": 30,
+        "maxOffersPerHour": 2
+      },
+      "brandVoice": "warm, friendly, neighbourhood",
+      "productHints": ["coffee", "lunch bowl", "soup", "pastry", "hot drink"],
+      "contextTriggers": [
+        "cold_quiet_lunch", "cold_morning", "rainy_afternoon",
+        "rainy_lunch", "mild_lunch", "morning_discovery",
+        "quiet_evening", "quiet_afternoon"
+      ],
+      "active": true
+    },
+    {
+      "id": "bistro_kreuzberg_002",
+      "name": "Bistro K36",
+      "category": "restaurant",
+      "city": "all",
+      "zone": "kreuzberg",
+      "address": "Oranienstraße 36, Kreuzberg",
+      "logo": "🍽️",
+      "goals": ["fill_quiet_hours", "weekend_traffic", "evening_seatings"],
+      "constraints": {
+        "maxDiscountPercent": 18,
+        "minDiscountPercent": 10,
+        "activeHoursStart": "00:00",
+        "activeHoursEnd": "23:59",
+        "offerCooldownMinutes": 45,
+        "maxOffersPerHour": 2
+      },
+      "brandVoice": "bold, urban, no-nonsense",
+      "productHints": ["lunch plate", "dinner special", "craft beer", "tapas"],
+      "contextTriggers": [
+        "quiet_evening", "quiet_afternoon", "cold_quiet_lunch",
+        "rainy_lunch", "rainy_afternoon", "mild_lunch"
+      ],
+      "active": true
+    },
+    {
+      "id": "bakery_mitte_003",
+      "name": "Bäckerei Herzlich",
+      "category": "bakery",
+      "city": "all",
+      "zone": "mitte",
+      "address": "Rosenthaler Str. 12, Berlin Mitte",
+      "logo": "🥐",
+      "goals": ["morning_traffic", "fill_quiet_hours"],
+      "constraints": {
+        "maxDiscountPercent": 15,
+        "minDiscountPercent": 5,
+        "activeHoursStart": "00:00",
+        "activeHoursEnd": "23:59",
+        "offerCooldownMinutes": 60,
+        "maxOffersPerHour": 1
+      },
+      "brandVoice": "cozy, traditional, heartfelt",
+      "productHints": ["croissant", "fresh bread", "pastry", "morning roll", "coffee"],
+      "contextTriggers": [
+        "cold_morning", "morning_discovery", "mild_lunch", "quiet_afternoon", "quiet_evening"
+      ],
+      "active": true
+    },
+    {
+      "id": "bar_friedrichshain_004",
+      "name": "Bar Volta",
+      "category": "bar",
+      "city": "all",
+      "zone": "friedrichshain",
+      "address": "Simon-Dach-Straße 8, Friedrichshain",
+      "logo": "🍺",
+      "goals": ["evening_seatings", "weekend_traffic", "fill_quiet_hours"],
+      "constraints": {
+        "maxDiscountPercent": 22,
+        "minDiscountPercent": 10,
+        "activeHoursStart": "00:00",
+        "activeHoursEnd": "23:59",
+        "offerCooldownMinutes": 60,
+        "maxOffersPerHour": 1
+      },
+      "brandVoice": "energetic, cool, Berlin underground",
+      "productHints": ["craft beer", "cocktail", "happy hour special", "snacks"],
+      "contextTriggers": [
+        "quiet_evening", "rainy_afternoon", "cold_quiet_lunch", "hot_lunch"
+      ],
+      "active": true
+    }
+  ]
+}
