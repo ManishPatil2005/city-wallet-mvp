@@ -5,11 +5,11 @@ const { generateOffersForContext } = require('../engines/offerEngine');
 const { trackOfferGenerated, trackAcceptance, trackDismissal } = require('../engines/analyticsEngine');
 
 // POST /api/offers/generate
-// Body: { city, zone, limit }
+// Body: { city, zone, limit, scenario }
 router.post('/generate', async (req, res) => {
   try {
-    const { city = 'berlin', zone = 'city-center', limit = 3 } = req.body;
-    const context = await buildContext(city, zone);
+    const { city = 'berlin', zone = 'city-center', limit = 3, scenario } = req.body;
+    const context = await buildContext(city, zone, { scenario });
     const offers  = generateOffersForContext(context, limit);
 
     if (offers.length === 0) {

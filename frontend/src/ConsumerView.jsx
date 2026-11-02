@@ -7,7 +7,16 @@ function formatTime(secs) {
   return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 
+const SCENARIOS = [
+  { id: 'canonical_cold_lunch', label: '❄️ Canonical: Cold Lunch (Guaranteed)', badge: 'Judge Scenario 1' },
+  { id: 'rainy_afternoon',      label: '🌧️ Rainy Afternoon',                 badge: 'Context Trigger 2' },
+  { id: 'quiet_evening',        label: '🌆 Quiet Evening Social',             badge: 'Context Trigger 3' },
+  { id: 'dead_hour_night',      label: '⛔ Night Dead Hour (0 Offers)',       badge: 'Deterministic Guard' },
+  { id: 'live',                 label: '⏱️ Live Host Clock',                  badge: 'Real-time' },
+];
+
 export default function ConsumerView({ city }) {
+  const [scenario, setScenario] = useState('canonical_cold_lunch');
   const [context, setContext] = useState(null);
   const [offers, setOffers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -18,11 +27,11 @@ export default function ConsumerView({ city }) {
   const [simulating, setSimulating] = useState(false);
   const [validated, setValidated] = useState(null);
 
-  const fetchOffers = async () => {
+  const fetchOffers = async (selectedScenario = scenario) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await generateOffers(city);
+      const data = await generateOffers(city, 'city-center', selectedScenario);
       setContext(data.context);
       setOffers(data.offers || []);
     } catch (e) {
@@ -33,8 +42,8 @@ export default function ConsumerView({ city }) {
   };
 
   useEffect(() => {
-    fetchOffers();
-  }, [city]);
+    fetchOffers(scenario);
+  }, [city, scenario]);
 
   // Countdown timer for expanded offer & redemption
   useEffect(() => {
@@ -145,12 +154,29 @@ export default function ConsumerView({ city }) {
 
   return (
     <>
+      {/* Deterministic Judge Scenario Selector */}
+      <div className="scenario-bar">
+        <div className="scenario-label">🎯 Judge Context Scenario:</div>
+        <div className="scenario-pills">
+          {SCENARIOS.map(s => (
+            <button
+              key={s.id}
+              className={`scenario-pill ${scenario === s.id ? 'active' : ''}`}
+              onClick={() => setScenario(s.id)}
+            >
+              <span>{s.label}</span>
+              <span className="scenario-sub-badge">{s.badge}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       {loading && <div className="loading">Sensing city context...</div>}
       
       {error && !loading && (
         <div className="error-card">
           <p>⚠️ {error}</p>
-          <button className="retry-btn" onClick={fetchOffers}>Retry</button>
+          <button className="retry-btn" onClick={() => fetchOffers(scenario)}>Retry</button>
         </div>
       )}
 
@@ -158,7 +184,7 @@ export default function ConsumerView({ city }) {
         <div className="context-panel">
           <div className="context-header">
             <span className="context-title">📍 {context.cityName} · {timeLabel[context.timePeriod] || context.timePeriod}</span>
-            <span className="context-time">Updated Now</span>
+            <span className="context-time">{scenario === 'live' ? 'Live Clock' : 'Preset Deterministic'}</span>
           </div>
           <div className="signal-row">
             {context.signals?.map((sig, i) => (
@@ -169,7 +195,7 @@ export default function ConsumerView({ city }) {
             ))}
           </div>
           {context.primaryState && (
-            <div className="state-tag">Context: {context.primaryState.replace(/_/g, ' ')}</div>
+            <div className="state-tag">Composite Context: {context.primaryState.replace(/_/g, ' ')}</div>
           )}
         </div>
       )}
@@ -179,13 +205,13 @@ export default function ConsumerView({ city }) {
           <div className="icon">🌃</div>
           {context.hour >= 2 && context.hour <= 5 ? (
             <>
-              <h3>Night Mode Active</h3>
-              <p>Merchants are closed and context sensing is paused. Check back in the morning.</p>
+              <h3>Night Mode Active (02:00 - 05:00)</h3>
+              <p>Deterministic Guard: Inner-city retail is closed during late night dead hours. Push generation is suppressed to protect battery and merchant operating hours.</p>
             </>
           ) : (
             <>
-              <h3>No offers right now</h3>
-              <p>Current context doesn't trigger any active merchant rules. Change the time (in code) or try a different city.</p>
+              <h3>No Merchant Rules Triggered</h3>
+              <p>Current context state (<code>{context.primaryState}</code>) does not meet merchant constraints. Switch to <strong>Canonical: Cold Lunch</strong> above to see guaranteed offer generation.</p>
             </>
           )}
         </div>

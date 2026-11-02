@@ -1,10 +1,10 @@
 const API = '';
 
-export async function generateOffers(city = 'berlin', zone = 'city-center') {
+export async function generateOffers(city = 'berlin', zone = 'city-center', scenario = 'canonical_cold_lunch') {
   const res = await fetch(`${API}/api/offers/generate`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ city, zone, limit: 3 }),
+    body: JSON.stringify({ city, zone, limit: 3, scenario }),
   });
   return res.json();
 }
@@ -50,5 +50,14 @@ export async function getMerchantStats(merchantId) {
 
 export async function getAllMerchants() {
   const res = await fetch(`${API}/api/merchant/all`);
+  return res.json();
+}
+
+export async function updateMerchantRules(merchantId, updates) {
+  const res = await fetch(`${API}/api/merchant/${merchantId}/rules`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updates),
+  });
   return res.json();
 }

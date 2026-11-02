@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { getAllMerchants } from './api';
+import { getAllMerchants, updateMerchantRules } from './api';
 
 export default function MerchantView() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedMerchantId, setSelectedMerchantId] = useState(null);
+  const [updating, setUpdating] = useState(false);
 
   const fetchStats = async () => {
     try {
@@ -26,6 +27,34 @@ export default function MerchantView() {
     return () => clearInterval(interval);
   }, []);
 
+  const handleToggleActive = async (merchant) => {
+    setUpdating(true);
+    try {
+      await updateMerchantRules(merchant.id, { active: !merchant.active });
+      await fetchStats();
+    } catch (e) {
+      alert('Failed to update merchant rules');
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const handleUpdateMaxDiscount = async (merchant, delta) => {
+    const currentMax = merchant.constraints?.maxDiscountPercent || 20;
+    const newMax = Math.min(35, Math.max(merchant.constraints?.minDiscountPercent || 5, currentMax + delta));
+    setUpdating(true);
+    try {
+      await updateMerchantRules(merchant.id, {
+        constraints: { ...merchant.constraints, maxDiscountPercent: newMax },
+      });
+      await fetchStats();
+    } catch (e) {
+      alert('Failed to update discount');
+    } finally {
+      setUpdating(false);
+    }
+  };
+
   if (loading || !data) return <div className="loading">Loading dashboard...</div>;
 
   const merchant = data.merchants.find(m => m.id === selectedMerchantId);
@@ -37,8 +66,8 @@ export default function MerchantView() {
   return (
     <div>
       <div className="merchant-header">
-        <h2>Merchant Dashboard</h2>
-        <p>Live generative offer performance & configuration.</p>
+        <h2>Merchant Operations & Analytics</h2>
+        <p>Live demand steering, active AI rule enforcement, and transaction telemetry.</p>
       </div>
 
       <div className="merchant-select-bar">
@@ -48,10 +77,52 @@ export default function MerchantView() {
             className={`merchant-pill ${m.id === selectedMerchantId ? 'active' : ''}`}
             onClick={() => setSelectedMerchantId(m.id)}
           >
-            {m.logo} {m.name}
+            {m.logo} {m.name} {!m.active && '(Paused)'}
           </button>
         ))}
       </div>
+
+      {merchant && (
+        <div className="merchant-control-card">
+          <div className="merchant-control-header">
+            <div>
+              <h3>{merchant.logo} {merchant.name}</h3>
+              <p className="merchant-control-sub">
+                Status: <span className={merchant.active ? 'status-active' : 'status-paused'}>
+                  {merchant.active ? '● Active Demand Generation' : '○ Paused (Suppressed)'}
+                </span>
+                {' · '}📍 Distance: <strong>{merchant.constraints?.distance || '0.2 km'}</strong>
+              </p>
+            </div>
+            <button
+              className={`toggle-campaign-btn ${merchant.active ? 'btn-pause' : 'btn-resume'}`}
+              onClick={() => handleToggleActive(merchant)}
+              disabled={updating}
+            >
+              {merchant.active ? 'Pause Campaign' : 'Resume Campaign'}
+            </button>
+          </div>
+
+          <div className="merchant-param-row">
+            <div className="param-item">
+              <span className="param-label">Max Discount Cap:</span>
+              <span className="param-val">{merchant.constraints?.maxDiscountPercent}%</span>
+              <div className="param-btns">
+                <button onClick={() => handleUpdateMaxDiscount(merchant, -2)} disabled={updating}>-2%</button>
+                <button onClick={() => handleUpdateMaxDiscount(merchant, +2)} disabled={updating}>+2%</button>
+              </div>
+            </div>
+            <div className="param-item">
+              <span className="param-label">Active Operating Hours:</span>
+              <span className="param-val">{merchant.constraints?.activeHoursStart} - {merchant.constraints?.activeHoursEnd}</span>
+            </div>
+            <div className="param-item">
+              <span className="param-label">Target Archetypes:</span>
+              <span className="param-val">{merchant.goals?.slice(0, 2).join(', ')}</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="stats-grid">
         <div className="stat-card">
@@ -75,7 +146,7 @@ export default function MerchantView() {
       </div>
 
       <div className="feed-section">
-        <h3 className="feed-title">Live Offer Feed</h3>
+        <h3 className="feed-title">Real-Time Payone Telemetry Feed</h3>
         {recentOffers.length === 0 ? (
           <div className="loading">No offers generated yet. Switch to Consumer tab to trigger some!</div>
         ) : (
@@ -97,12 +168,12 @@ export default function MerchantView() {
 
       {merchant && (
         <div className="feed-section" style={{ marginTop: '24px' }}>
-          <h3 className="feed-title">Active AI Rules (Read-only)</h3>
+          <h3 className="feed-title">Deterministic Engine Constraints</h3>
           <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', marginBottom: '16px' }}>
-            The AI Generative Engine is using these constraints to build offers on the fly.
+            The offline generation engine synthesizes copy, discount boundaries, and visual themes strictly within these boundaries without LLM hallucinations.
           </p>
           <div style={{ background: 'rgba(0,0,0,0.3)', padding: '16px', borderRadius: '12px', fontFamily: 'monospace', fontSize: '12px', color: '#69f0ae', whiteSpace: 'pre-wrap' }}>
-            {JSON.stringify({ goals: merchant.goals, constraints: merchant.constraints }, null, 2)}
+            {JSON.stringify({ active: merchant.active, goals: merchant.goals, constraints: merchant.constraints }, null, 2)}
           </div>
         </div>
       )}

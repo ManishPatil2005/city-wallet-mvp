@@ -71,6 +71,14 @@
       "demand": ["quiet", "normal"],
       "priority": 6,
       "preferredArchetypes": ["discovery", "weather_comfort"]
+    },
+    "freezing_night": {
+      "label": "Freezing Late Night",
+      "weather": ["freezing", "cold"],
+      "timePeriod": ["night"],
+      "demand": ["normal", "quiet"],
+      "priority": 7,
+      "preferredArchetypes": ["weather_comfort", "evening_social"]
     }
   },
   "eventCalendar": {

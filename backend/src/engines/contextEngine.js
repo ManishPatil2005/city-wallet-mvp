@@ -101,16 +101,60 @@ function buildSignals(weatherClass, weather, timePeriod, demand, events) {
   return signals;
 }
 
+// ─── Preset Scenarios for Demonstrations & Judging ───────────────────
+const PRESET_SCENARIOS = {
+  canonical_cold_lunch: {
+    id: 'canonical_cold_lunch',
+    name: 'Canonical: Cold Lunch Rush',
+    description: 'Cold (8°C) + Weekday Lunch + Low footfall. Guaranteed Café Mitte offer.',
+    hour: 12,
+    timePeriod: 'lunch',
+    weather: { temp: 8, feelsLike: 6, condition: 'overcast, chilly', humidity: 68, classification: 'cold' },
+    demand: { absolute: 0.22, deltaPercent: -35, level: 'quiet' },
+  },
+  rainy_afternoon: {
+    id: 'rainy_afternoon',
+    name: 'Rainy Afternoon',
+    description: 'Rainy (11°C) + Afternoon + Quiet footfall. Triggers shelter/comfort archetypes.',
+    hour: 15,
+    timePeriod: 'afternoon',
+    weather: { temp: 11, feelsLike: 9, condition: 'rain showers', humidity: 90, classification: 'rainy' },
+    demand: { absolute: 0.24, deltaPercent: -28, level: 'quiet' },
+  },
+  quiet_evening: {
+    id: 'quiet_evening',
+    name: 'Quiet Evening Social',
+    description: 'Cool (14°C) + Evening + Quiet footfall. Triggers evening social archetypes.',
+    hour: 19,
+    timePeriod: 'evening',
+    weather: { temp: 14, feelsLike: 12, condition: 'clear dusk', humidity: 60, classification: 'cool' },
+    demand: { absolute: 0.28, deltaPercent: -22, level: 'quiet' },
+  },
+  dead_hour_night: {
+    id: 'dead_hour_night',
+    name: 'Night Dead Hour (No Offers)',
+    description: '03:00 Night. Deterministically triggers 0 offers due to merchant closure policy.',
+    hour: 3,
+    timePeriod: 'night',
+    weather: { temp: 3, feelsLike: 0, condition: 'clear sky, freezing', humidity: 75, classification: 'freezing' },
+    demand: { absolute: 0.08, deltaPercent: -65, level: 'quiet' },
+  },
+};
+
 // ─── Main: Build Context ──────────────────────────────────────────
-function buildContext(cityId = 'berlin', zone = 'city-center') {
-  const city       = cities[cityId] || cities.berlin;
-  const now        = new Date();
-  const hour       = now.getHours();
-  const timePeriod = classifyTime(hour);
-  const weather    = getWeather(city);
-  const weatherClass = classifyWeather(weather.temp);
-  const demand     = simulatePayoneDensity(hour, city.densityMultiplier || 1.0);
-  const events     = getLocalEvents(timePeriod);
+function buildContext(cityId = 'berlin', zone = 'city-center', options = {}) {
+  const city = cities[cityId] || cities.berlin;
+  const scenarioKey = options.scenario;
+  const preset = scenarioKey && PRESET_SCENARIOS[scenarioKey];
+
+  let now = new Date();
+  let hour = preset ? preset.hour : now.getHours();
+  let timePeriod = preset ? preset.timePeriod : classifyTime(hour);
+  let weather = preset ? preset.weather : getWeather(city);
+  let weatherClass = weather.classification || classifyWeather(weather.temp);
+  let demand = preset ? preset.demand : simulatePayoneDensity(hour, city.densityMultiplier || 1.0);
+  let events = getLocalEvents(timePeriod);
+
   const compositeMatches = resolveCompositeState(weatherClass, timePeriod, demand);
   const primaryState     = compositeMatches[0]?.key || `${weatherClass}_${timePeriod}`;
   const signals          = buildSignals(weatherClass, weather, timePeriod, demand, events);
@@ -119,6 +163,7 @@ function buildContext(cityId = 'berlin', zone = 'city-center') {
     cityId,
     cityName: city.name,
     zone,
+    scenario: scenarioKey || 'live',
     timestamp: now.toISOString(),
     weather: { ...weather, classification: weatherClass },
     timePeriod,
@@ -133,4 +178,4 @@ function buildContext(cityId = 'berlin', zone = 'city-center') {
   };
 }
 
-module.exports = { buildContext };
+module.exports = { buildContext, PRESET_SCENARIOS };

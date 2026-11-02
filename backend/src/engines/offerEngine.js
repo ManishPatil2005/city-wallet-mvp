@@ -102,7 +102,15 @@ const VISUAL_STYLES = {
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function deterministicPick(arr, seed = '') {
+  if (!arr || arr.length === 0) return '';
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = (hash << 5) - hash + seed.charCodeAt(i);
+    hash |= 0;
+  }
+  return arr[Math.abs(hash) % arr.length];
+}
 
 function fillTemplate(tpl, vars) {
   return tpl
@@ -167,7 +175,7 @@ function generateOffer(merchant, context) {
   const wc           = context.weather.classification;
   const discount     = computeDiscount(merchant, context.demand, context.compositeMatches);
   const expiry       = computeExpiry(context.timePeriod, archetypeKey);
-  const product      = pick(merchant.productHints);
+  const product      = deterministicPick(merchant.productHints, `${merchant.id}_${context.primaryState}`);
 
   const vars = {
     discount,
@@ -183,25 +191,25 @@ function generateOffer(merchant, context) {
   const headlinePool = archetype.headlines[wc] || archetype.headlines.default || archetype.headlines[Object.keys(archetype.headlines)[0]];
   const bodyPool     = archetype.bodies[wc]    || archetype.bodies.default    || archetype.bodies[Object.keys(archetype.bodies)[0]];
 
-  const headline = fillTemplate(pick(headlinePool), vars);
-  const body     = fillTemplate(pick(bodyPool),     vars);
+  const headline = fillTemplate(deterministicPick(headlinePool, `${merchant.id}_${archetypeKey}_head`), vars);
+  const body     = fillTemplate(deterministicPick(bodyPool,     `${merchant.id}_${archetypeKey}_body`), vars);
 
   const visualKey   = archetype.visualKey(wc);
   const visualStyle = VISUAL_STYLES[visualKey] || VISUAL_STYLES.off_peak;
 
   return {
-    id:           uuidv4(),
-    merchantId:   merchant.id,
-    merchantName: merchant.name,
-    merchantLogo: merchant.logo,
+    id:              `offer_${merchant.id}_${context.primaryState}`,
+    merchantId:      merchant.id,
+    merchantName:    merchant.name,
+    merchantLogo:    merchant.logo,
     merchantAddress: merchant.address,
-    distance:     (Math.random() * 0.8 + 0.1).toFixed(1) + ' km',
-    archetype:    archetypeKey,
-    tone:         archetype.tone,
+    distance:        merchant.constraints?.distance || '0.2 km',
+    archetype:       archetypeKey,
+    tone:            archetype.tone,
     headline,
     body,
     discount,
-    discountType: 'percentage',
+    discountType:    'percentage',
     product,
     ...expiry,
     visualStyle,
@@ -218,10 +226,9 @@ function generateOffer(merchant, context) {
 // ─── Public: Generate Offers for Context ─────────────────────────────────────
 function generateOffersForContext(context, limit = 3) {
   const { merchants } = merchantRulesData;
-  const now = new Date();
-  const nowHHMM = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  const contextHHMM = `${String(context.hour).padStart(2,'0')}:00`;
 
-  // Deterministic Dead Hour Scenario
+  // Deterministic Dead Hour Scenario (02:00 - 05:00)
   if (context.hour >= 2 && context.hour <= 5) {
     return [];
   }
@@ -229,8 +236,8 @@ function generateOffersForContext(context, limit = 3) {
   const eligible = merchants.filter(m => {
     if (!m.active) return false;
     if (m.city !== context.cityId && m.city !== 'all') return false;
-    // Check active hours
-    if (nowHHMM < m.constraints.activeHoursStart || nowHHMM > m.constraints.activeHoursEnd) return false;
+    // Check active hours against context time
+    if (contextHHMM < m.constraints.activeHoursStart || contextHHMM > m.constraints.activeHoursEnd) return false;
     // Check context triggers
     return m.contextTriggers.some(trigger =>
       context.compositeMatches.some(cm => cm.key === trigger) ||

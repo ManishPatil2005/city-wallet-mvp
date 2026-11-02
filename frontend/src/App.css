@@ -274,3 +274,137 @@ body {
   .topnav { flex-wrap: wrap; gap: 8px; }
   .topnav-sub { display: none; }
 }
+
+/* ─── Judge Scenario Selector ────────────────────────────────── */
+.scenario-bar {
+  background: rgba(79, 158, 255, 0.06);
+  border: 1px solid rgba(79, 158, 255, 0.2);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+.scenario-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #4f9eff;
+  margin-bottom: 10px;
+}
+.scenario-pills {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.scenario-pill {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  transition: all 0.2s ease;
+}
+.scenario-pill:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.scenario-pill.active {
+  background: rgba(79, 158, 255, 0.2);
+  border-color: #4f9eff;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(79, 158, 255, 0.2);
+}
+.scenario-sub-badge {
+  font-size: 9px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+}
+.scenario-pill.active .scenario-sub-badge {
+  color: #69f0ae;
+}
+
+/* ─── Merchant Operations Card ───────────────────────────────── */
+.merchant-control-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 18px 20px;
+  margin-bottom: 24px;
+}
+.merchant-control-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.merchant-control-header h3 {
+  font-size: 18px;
+  font-weight: 800;
+  margin: 0;
+}
+.merchant-control-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 4px;
+}
+.status-active { color: #00c853; font-weight: 700; }
+.status-paused { color: #ff5252; font-weight: 700; }
+.toggle-campaign-btn {
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s;
+}
+.btn-pause { background: rgba(255, 82, 82, 0.2); color: #ff5252; border: 1px solid rgba(255, 82, 82, 0.4); }
+.btn-resume { background: rgba(0, 200, 83, 0.2); color: #00c853; border: 1px solid rgba(0, 200, 83, 0.4); }
+.toggle-campaign-btn:hover { opacity: 0.85; }
+.merchant-param-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 14px;
+}
+.param-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+.param-val {
+  color: #fff;
+  font-weight: 700;
+}
+.param-btns {
+  display: flex;
+  gap: 4px;
+}
+.param-btns button {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.param-btns button:hover {
+  background: rgba(255, 255, 255, 0.15);
+}

@@ -17,6 +17,57 @@ Inner-city retail struggles with dead hours and unpredictable weather. Tradition
 
 This MVP is purposefully built to be lightweight, deterministic, and highly stable for demonstrations without relying on paid external APIs or complex build tools.
 
+```mermaid
+graph TD
+    subgraph "Frontend (React + Vite)"
+        CV[Consumer View]
+        MV[Merchant View]
+        API_L[API Layer - Fetch]
+    end
+
+    subgraph "Backend (Node.js + Express)"
+        R[Routes / API Endpoints]
+        
+        subgraph "Core Engines"
+            CE[Context Engine]
+            OE[Offer Engine]
+            RE[Redemption Engine]
+            AE[Analytics Engine]
+        end
+        
+        subgraph "Data Layer (JSON)"
+            CC[cities.json]
+            CR[contextRules.json]
+            MR[merchantRules.json]
+        end
+    end
+
+    %% Flow
+    CV -->|Request Context/Offers| API_L
+    API_L -->|GET/POST| R
+    
+    R --> CE
+    CE -->|Determinism| CC
+    CE -->|Logic| CR
+    
+    CE -->|Context State| OE
+    OE -->|Match Triggers| MR
+    OE -->|Archetype Scoring| OE
+    
+    CV -->|Claim & Scan| RE
+    RE -->|JWT Token| RE
+    
+    RE -->|Track Action| AE
+    MV -->|Fetch Stats & Controls| AE
+    AE -->|Aggregate Store| AE
+
+    %% Styling
+    style CE fill:#e1f5fe,stroke:#01579b
+    style OE fill:#fff3e0,stroke:#e65100
+    style RE fill:#f3e5f5,stroke:#4a148c
+    style AE fill:#e8f5e9,stroke:#1b5e20
+```
+
 ### Tech Stack
 - **Backend**: Node.js + Express
 - **Frontend**: React + Vite
@@ -24,6 +75,15 @@ This MVP is purposefully built to be lightweight, deterministic, and highly stab
 - **Data**: JSON configuration files (No external database required)
 - **Security**: JWT (JSON Web Tokens) for simulated secure redemption flow
 - **AI/Logic**: Parameterized, offline deterministic generation engine (Zero API cost, zero latency)
+
+### 📊 Deterministic Scenario Matrix
+
+| Scenario Preset | Sensed Context Signals | Distance | Expected System Behavior | Triggered Merchant |
+| :--- | :--- | :--- | :--- | :--- |
+| **🌟 Canonical: Cold Lunch** | Cold (8°C) + Lunchtime (12:00) + Low Demand (-35%) | **0.1 km (≤ 100m)** | **Offer MUST appear (100% deterministic)** | **Café Mitte** (Warm comfort archetype, 18% off) |
+| **🌧️ Rainy Afternoon** | Rain (11°C) + Afternoon (15:00) + Quiet (-28%) | 0.3 km | Guaranteed shelter/warmth offer | **Bistro K36** (Shelter GenUI theme) |
+| **🌆 Quiet Evening** | Cool (14°C) + Evening (19:00) + Quiet (-22%) | 0.4 km | Guaranteed evening social deal | **Bar Volta** (Evening social theme) |
+| **⛔ Night Dead Hour** | 03:00 Night + Retail closed | - | **0 Offers (Deterministic Guard)** | None (Prevents late-night push spam) |
 
 ### 1. Context Sensing Layer (On-Device / Offline Simulation)
 Aggregates real-time signals without tracking user identity or relying on external paid APIs:

@@ -1,12 +1,17 @@
 const express = require('express');
 const router  = express.Router();
-const { buildContext } = require('../engines/contextEngine');
+const { buildContext, PRESET_SCENARIOS } = require('../engines/contextEngine');
 
-// GET /api/context?city=berlin&zone=city-center
+// GET /api/context/scenarios — list available demo scenarios
+router.get('/scenarios', (req, res) => {
+  res.json({ success: true, scenarios: Object.values(PRESET_SCENARIOS) });
+});
+
+// GET /api/context?city=berlin&zone=city-center&scenario=canonical_cold_lunch
 router.get('/', async (req, res) => {
   try {
-    const { city = 'berlin', zone = 'city-center' } = req.query;
-    const context = await buildContext(city, zone);
+    const { city = 'berlin', zone = 'city-center', scenario } = req.query;
+    const context = await buildContext(city, zone, { scenario });
     res.json({ success: true, context });
   } catch (err) {
     console.error('Context error:', err.message);
