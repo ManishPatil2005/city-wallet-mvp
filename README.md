@@ -166,6 +166,22 @@ npm run frontend
 
 ---
 
+## 🌐 1-Click Deployment on Vercel
+
+The repository is pre-configured with a fullstack `vercel.json` bridge. Both the **React/Vite Frontend** and the **Node.js/Express API** deploy automatically under a single Vercel domain with **100% default settings**.
+
+### Step-by-Step Vercel Deployment:
+1. Go to [vercel.com](https://vercel.com) and log in with your GitHub account.
+2. Click **"Add New..."** ➔ **"Project"**.
+3. Select your repository: **`ManishPatil2005/city-wallet-mvp`**.
+4. Leave **ALL settings at their default values** (Vercel automatically detects `vercel.json` for the build command and API routing).
+5. Click **"Deploy"**.
+6. In ~60 seconds, your live production URL (e.g. `https://city-wallet-mvp.vercel.app`) will be ready!
+
+*Zero environment variables or paid API keys required!*
+
+---
+
 ## 🎬 60-Second Judge Verification Walkthrough
 
 1. **Open the App**: Visit `http://localhost:5173`. You will see the **Consumer View**.
