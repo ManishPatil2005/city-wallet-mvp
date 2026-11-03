@@ -39,10 +39,15 @@ app.use((err, req, res, _next) => {
 });
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`\n🏙️  City Wallet API running on http://localhost:${PORT}`);
-  console.log(`📡  Health:    http://localhost:${PORT}/health`);
-  console.log(`🌤️  Context:   http://localhost:${PORT}/api/context?city=berlin`);
-  console.log(`🎁  Offers:    POST http://localhost:${PORT}/api/offers/generate`);
-  console.log(`🏪  Merchant:  http://localhost:${PORT}/api/merchant/all\n`);
-});
+
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`\n🏙️  City Wallet API running on http://localhost:${PORT}`);
+    console.log(`📡  Health:    http://localhost:${PORT}/health`);
+    console.log(`🌤️  Context:   http://localhost:${PORT}/api/context?city=berlin`);
+    console.log(`🎁  Offers:    POST http://localhost:${PORT}/api/offers/generate`);
+    console.log(`🏪  Merchant:  http://localhost:${PORT}/api/merchant/all\n`);
+  });
+}
+
+module.exports = app;
