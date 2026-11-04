@@ -10,11 +10,23 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '1mb' }));
 
-// ─── Routes ───────────────────────────────────────────────────────────────────
-app.use('/api/context',    require('./routes/context'));
-app.use('/api/offers',     require('./routes/offers'));
-app.use('/api/redeem',     require('./routes/redemption'));
-app.use('/api/merchant',   require('./routes/merchant'));
+// ─── Routes (Both /api/* and /* aliases for Vercel Serverless compatibility) ───
+const contextRoute    = require('./routes/context');
+const offersRoute     = require('./routes/offers');
+const redemptionRoute = require('./routes/redemption');
+const merchantRoute   = require('./routes/merchant');
+
+app.use('/api/context',  contextRoute);
+app.use('/context',      contextRoute);
+
+app.use('/api/offers',   offersRoute);
+app.use('/offers',       offersRoute);
+
+app.use('/api/redeem',   redemptionRoute);
+app.use('/redeem',       redemptionRoute);
+
+app.use('/api/merchant', merchantRoute);
+app.use('/merchant',     merchantRoute);
 
 // ─── Health Check ─────────────────────────────────────────────────────────────
 app.get('/health', (req, res) => {
